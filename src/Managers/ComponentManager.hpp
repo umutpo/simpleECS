@@ -37,8 +37,8 @@ public:
     }
 
     template <typename T>
-    void addComponent(Entity entity) {
-        return getComponentArray<T>()->addComponent(entity);
+    void addComponent(Entity entity, T component) {
+        return getComponentArray<T>()->addComponent(entity, component);
     }
 
     template <typename T>

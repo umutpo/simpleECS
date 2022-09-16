@@ -3,6 +3,8 @@
 #include <Managers/EntityManager.hpp>
 #include <Managers/ComponentManager.hpp>
 #include <Managers/SystemManager.hpp>
+#include <Data/Types.hpp>
+#include <Data/C
 #include <memory>
 
 class Container {
@@ -51,13 +53,26 @@ public:
     }
 
     template <typename T>
-    const char* getComponentType() {
-        return mComponentManager->getComponentType<T>();
+    T& getComponent(Entity entity) {
+        return mComponentManager->getComponent<T>(entity);
     }
 
     template <typename T>
-    std::shared_ptr<T> registerSystem() {
-        return mSystemManager->registerSystem<T>();
+    ComponentType getComponentType() {
+        return mComponentManager->getComponentType<T>();
+    }
+
+    template<typename T>
+    std::shared_ptr<T> registerSystemWithComponents(std::vector<ComponentType> components) {
+        auto newSystem = registerSystem<T>();
+
+        Signature systemSignature;
+        for (auto& component : components) {
+            systemSignature.set(component);
+        }
+        globalContainer.setSystemSignature<T>(systemSignature);
+
+        return physicsSystem;
     }
 
     template <typename T>
@@ -66,6 +81,11 @@ public:
     }
 
 private:
+    template <typename T>
+    std::shared_ptr<T> registerSystem() {
+        return mSystemManager->registerSystem<T>();
+    }
+
     std::unique_ptr<EntityManager> mEntityManager;
     std::unique_ptr<ComponentManager> mComponentManager;
     std::unique_ptr<SystemManager> mSystemManager;

@@ -47,7 +47,7 @@ public:
     }
 
     template <typename T>
-    void getComponent(Entity entity) {
+    T& getComponent(Entity entity) {
         return getComponentArray<T>()->getComponent(entity);
     }
 private:

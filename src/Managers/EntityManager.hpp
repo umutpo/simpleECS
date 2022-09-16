@@ -1,10 +1,9 @@
 #pragma once
 
-#include "Types.hpp"
+#include "../Data/Types.hpp"
 
 #include <array>
 #include <queue>
-#include <memory>
 #include <assert.h>
 
 class EntityManager {

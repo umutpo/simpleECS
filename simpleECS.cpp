@@ -49,7 +49,10 @@ int main() {
 
 		auto stopTime = std::chrono::high_resolution_clock::now();
 
+        deltaTime = std::chrono::duration<float, std::chrono::seconds::period>(stopTime - startTime).count();
+
         std::cout << "First entity's x reached: " << globalContainer.getComponent<TransformComponent>(entities[0]).position.x << std::endl;
+        std::cout << "Third entity's z reached: " << globalContainer.getComponent<TransformComponent>(entities[2]).position.z << std::endl;
     }
 
     return 0;

@@ -19,17 +19,18 @@ public:
 
     template <typename T>
     std::shared_ptr<T> registerSystem() {
-        const char* typeName = typeid(T).name;
+        const char* typeName = typeid(T).name();
 
-        assert(mSystemSignatures.find(typeName) != mSystemSignatures.end() && "System already exists!");
+        assert(mSystemSignatures.find(typeName) == mSystemSignatures.end() && "System already exists!");
 
-        mSystems[typeName] = std::make_shared<T>();
-        return mSystems[typeName];
+        auto newSystem = std::make_shared<T>();
+        mSystems[typeName] = newSystem;
+        return newSystem;
     }
 
     template <typename T>
     void setSignature(Signature signature) {
-        const char* typeName = typeid(T).name;
+        const char* typeName = typeid(T).name();
         mSystemSignatures[typeName] = signature;
     }
 

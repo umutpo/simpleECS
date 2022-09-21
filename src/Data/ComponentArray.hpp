@@ -21,7 +21,7 @@ public:
     }
 
     void addComponent(Entity entity, T component) {
-        assert(mComponentArray.find(entity) == mComponentArray.end() && "Component exists!");
+        assert(mIdToIndex.find(entity) == mIdToIndex.end() && "Component exists!");
 
         mComponentArray[mNextIndex] = component;
         mIdToIndex[entity] = mNextIndex;
@@ -31,7 +31,7 @@ public:
     }
 
     void removeComponent(Entity entity) {
-        assert(mComponentArray.find(entity) != mComponentArray.end() && "Component does NOT exist!");
+        assert(mIdToIndex.find(entity) != mIdToIndex.end() && "Component does NOT exist!");
 
         unsigned int replacedComponentIndex = mIdToIndex[entity];
         unsigned int lastComponentIndex = mNextIndex - 1;
@@ -42,13 +42,13 @@ public:
         mComponentArray[replacedComponentIndex] = mComponentArray[lastComponentIndex];
         
         mIdToIndex.erase(entity);
-        mIndexToId.erase(lastComponentIndex)
+        mIndexToId.erase(lastComponentIndex);
         
         mNextIndex--;
     }
 
     T& getComponent(Entity entity) {
-        assert(mComponentArray.find(entity) != mComponentArray.end() && "Component does NOT exist!");
+        assert(mIdToIndex.find(entity) != mIdToIndex.end() && "Component does NOT exist!");
 
         return mComponentArray[mIdToIndex[entity]];
     }

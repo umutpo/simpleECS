@@ -1,18 +1,18 @@
 #pragma once
 
-#include <Managers/EntityManager.hpp>
-#include <Managers/ComponentManager.hpp>
-#include <Managers/SystemManager.hpp>
-#include <Data/Types.hpp>
-#include <Data/C
+#include "Managers/EntityManager.hpp"
+#include "Managers/ComponentManager.hpp"
+#include "Managers/SystemManager.hpp"
+#include "Data/Types.hpp"   
+
 #include <memory>
 
 class Container {
 public:
     void initialize() {
-        mEntityManager = std::make_unique<EntityManager>();
-        mComponentManager = std::make_unique<ComponentManager>();
-        mSystemManager = std::make_unique<SystemManager>();
+        mEntityManager = std::unique_ptr<EntityManager>(new EntityManager());
+        mComponentManager = std::unique_ptr<ComponentManager>(new ComponentManager());
+        mSystemManager = std::unique_ptr<SystemManager>(new SystemManager());
     }
 
     Entity createEntity() {
@@ -32,7 +32,7 @@ public:
 
     template <typename T>
     void addComponent(Entity entity, T component) {
-        Signature entitySignature = mEntityManager.getEntitySignature(entity);
+        Signature entitySignature = mEntityManager->getEntitySignature(entity);
         ComponentType componentType = mComponentManager->getComponentType<T>();
         entitySignature.set(componentType, true);
         mEntityManager->setEntitySignature(entity, entitySignature);
@@ -43,13 +43,13 @@ public:
 
     template <typename T>
     void removeComponent(Entity entity) {
-        Signature entitySignature = mEntityManager.getEntitySignature(entity);
+        Signature entitySignature = mEntityManager->getEntitySignature(entity);
         ComponentType componentType = mComponentManager->getComponentType<T>();
         entitySignature.set(componentType, false);
         mEntityManager->setEntitySignature(entity, entitySignature);
         mSystemManager->onEntitySignatureChanged(entity, entitySignature);
         
-        mComponentManager->removeComponent(entity);
+        mComponentManager->removeComponent<T>(entity);
     }
 
     template <typename T>
@@ -70,9 +70,9 @@ public:
         for (auto& component : components) {
             systemSignature.set(component);
         }
-        globalContainer.setSystemSignature<T>(systemSignature);
+        setSystemSignature<T>(systemSignature);
 
-        return physicsSystem;
+        return newSystem;
     }
 
     template <typename T>

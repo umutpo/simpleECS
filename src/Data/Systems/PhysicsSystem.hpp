@@ -13,8 +13,8 @@ public:
             TransformComponent& transformComponent = globalContainer.getComponent<TransformComponent>(entity);
 
             transformComponent.position.x += deltaTime;
-            transformComponent.position.y += deltaTime;
-            transformComponent.position.z += deltaTime;
+            transformComponent.position.y += 2 * deltaTime;
+            transformComponent.position.z += 3 * deltaTime;
         }
     }
 };

@@ -18,22 +18,31 @@ public:
 
     template <typename T>
     void registerComponent() {
-        const char* typeName = typeid(T).name;
+        const char* typeName = typeid(T).name();
 
-        assert(mComponentTypes.find(typeName) != mComponentTypes.end() && "Component is already registered!");
+        assert(mComponentTypes.find(typeName) == mComponentTypes.end() && "Component is already registered!");
 
         mComponentTypes[typeName] = mNextComponentType;
-        mComponentArrays[mNextComponentType] = std::make_shared(ComponentArray<T>());
+        mComponentArrays[typeName] = std::make_shared<ComponentArray<T>>();
         mNextComponentType++;
     }
 
     template <typename T>
-    void getComponentType() {
-        const char* typeName = typeid(T).name;
+    ComponentType getComponentType() {
+        const char* typeName = typeid(T).name();
 
-        assert(mComponentTypes.find(typeName) == mComponentTypes.end() && "Component does NOT exist!");
+        assert(mComponentTypes.find(typeName) != mComponentTypes.end() && "Component does NOT exist!");
 
         return mComponentTypes[typeName];
+    }
+
+    template <typename T>
+    std::shared_ptr<ComponentArray<T>> getComponentArray() {
+        const char* typeName = typeid(T).name();
+
+        assert(mComponentTypes.find(typeName) != mComponentTypes.end() && "Component does NOT exist!");
+
+        return std::static_pointer_cast<ComponentArray<T>>(mComponentArrays[typeName]);
     }
 
     template <typename T>
@@ -53,7 +62,7 @@ public:
 private:
     std::unordered_map<const char*, ComponentType> mComponentTypes{};
 
-    std::unordered_map<ComponentType, std::shared_ptr<IComponentArray>> mComponentArrays{};
+    std::unordered_map<const char*, std::shared_ptr<IComponentArray>> mComponentArrays{};
 
     ComponentType mNextComponentType{};
 };

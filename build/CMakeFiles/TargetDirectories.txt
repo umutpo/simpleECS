@@ -1,3 +1,0 @@
-/home/umut/Documents/cs/simpleECS/build/CMakeFiles/simpleECS.dir
-/home/umut/Documents/cs/simpleECS/build/CMakeFiles/edit_cache.dir
-/home/umut/Documents/cs/simpleECS/build/CMakeFiles/rebuild_cache.dir

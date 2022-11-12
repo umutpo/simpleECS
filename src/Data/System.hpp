@@ -6,5 +6,6 @@
 
 class System {
 public:
+    virtual void Update(float deltaTime) = 0;
     std::set<Entity> mEntities{};
 };

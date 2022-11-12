@@ -8,7 +8,7 @@ extern Container globalContainer;
 
 class PhysicsSystem : public System {
 public:
-    void Update(float deltaTime) {
+    void Update(float deltaTime) override {
         for (auto& entity : mEntities) {
             TransformComponent& transformComponent = globalContainer.getComponent<TransformComponent>(entity);
 
